@@ -1,6 +1,6 @@
 from rest_framework.generics import ListAPIView, DestroyAPIView, CreateAPIView, ListCreateAPIView
-from .models import Categorias, Productos, ProductosCategorias, UsuarioModel
-from . serializers import CategoriaSerializer, ProductoSerializer, ProductosCategoriaSerializers, RegistroUsuarioSerializer
+from .models import Categorias, Productos, UsuarioModel
+from . serializers import CategoriaSerializer, CategoriaConProductosSerializer,ProductoSerializer, RegistroUsuarioSerializer
 from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
@@ -72,15 +72,15 @@ class ListarCategoriaApiView(ListAPIView):
                 'message': 'Categoria no existe'
             })
         # dir(instancia) > nos muestra todos los atributos y metodos de la clase
-        # print(dir(categoriaEncontrada))
+        print(dir(categoriaEncontrada))
         
         # SELECT * FROM platos WHERE categoria_id = ... AND id = 10;
-        print(categoriaEncontrada.productoscategorias_set.all())
-        categoria = categoriaEncontrada.pproductoscategorias_set.all() # estamos accediendo al primer plato de esta categoria
+        print(categoriaEncontrada.productos.filter(id=2).all())
+        categoria = categoriaEncontrada.productos.all()[0] # estamos accediendo al primer plato de esta categoria
         print(categoria.nombre)
         print(categoria.id)
 
-        serializador = ProductosCategorias(instance=categoriaEncontrada)
+        serializador = CategoriaConProductosSerializer(instance=categoriaEncontrada)
 
 
         return Response(data={
@@ -145,6 +145,9 @@ class ListarProductoApiView(ListAPIView):
         return Response(data={
             'message': 'Producto eliminado exitosamente'
         })
+
+
+
 
 class RegistroUsuarioApiView(CreateAPIView):
     def post(self, request: Request):

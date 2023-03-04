@@ -3,6 +3,13 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from .auth_manager import usuarioManager
 
 
+class Categorias(models.Model):
+    id = models.AutoField(primary_key=True, null=False)
+    nombre = models.CharField(max_length=50, unique=True) 
+
+    class Meta:
+        db_table ='categorias'
+        # ordering = ['nombre', 'id']
 
 class Productos(models.Model):
     # tipokekeopciones = (
@@ -33,27 +40,12 @@ class Productos(models.Model):
     #     choices= tiporellenoopciones,
     #     default='Manjar'
     # )
-    
+    categoria = models.ForeignKey(to=Categorias, on_delete=models.PROTECT, db_column='categoria_id', related_name='productos')
     class Meta:
         db_table ='productos'
 
 
 
-class Categorias(models.Model):
-    id = models.AutoField(primary_key=True, null=False)
-    nombre = models.CharField(max_length=50, unique=True) 
-
-    class Meta:
-        db_table ='categorias'
-        # ordering = ['nombre', 'id']
-
-
-class ProductosCategorias(models.Model):
-    id = models.AutoField(primary_key=True, null=False)
-    producto_id= models.ForeignKey(Productos, on_delete=models.CASCADE)
-    categoria_id= models.ForeignKey(Categorias, on_delete=models.CASCADE)
-
-    db_table ='productos_categorias'
 
 
 class UsuarioModel(AbstractBaseUser, PermissionsMixin):
