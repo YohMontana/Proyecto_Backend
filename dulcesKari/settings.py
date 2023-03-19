@@ -89,7 +89,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'HOST': 'localhost',
         'NAME': 'panaderia',
-        'PASSWORD': 'Paredes.23',
+        'PASSWORD': 'root',
         'USER': 'root',
         'PORT': '3306'
         
